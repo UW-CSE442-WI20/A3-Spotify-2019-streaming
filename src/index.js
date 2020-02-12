@@ -26,8 +26,8 @@ var margin = {
     bottom: 30,
     left: 10
 };
-var w = 1200 - margin.left - margin.right;
-var h = 612 - margin.top - margin.bottom;
+var w = 800 - margin.left - margin.right;
+var h = 400 - margin.top - margin.bottom;
 
 //set x and y ranges
 var y = d3.scaleBand()
@@ -49,13 +49,13 @@ function init() {
     // load global data
     d3.csv("streamsglobal10.csv").then(function (data) {
         slider.initSlider();
-        initGraph();
-
+        
         dataset = data;
         var filtered = data.filter(function (d) {
             return d["date"] === slider.getDate();
         })
         
+        initGraph();
         updateGraph(filtered);
 
         // update graph based on country dropdown
@@ -91,8 +91,7 @@ function init() {
 }
 
 function initGraph() {
-    svg = d3.select("div#graph")
-        .append("svg")
+    svg = d3.select("svg#graph")
         .attr("width", w + margin.left + margin.right)
         .attr("height", h + margin.top + margin.bottom)
         .append("g")
@@ -253,7 +252,7 @@ slider = function () {
             .tickValues(weeks2019)
             .displayValue(false)
             .on("onchange", val => {
-                d3.select("p#value").text(d3.timeFormat("%Y-%m-%d")(val));
+                d3.select("div#date-display").text(d3.timeFormat("%Y-%m-%d")(val));
                 date = d3.timeFormat("%Y-%m-%d")(val);
 
                 var filtered = dataset.filter(function (d) {
@@ -277,7 +276,7 @@ slider = function () {
         gTime.selectAll("text").attr("dx", "-10px").attr("dy", "-16px");
 
         // show date at very beginning
-        d3.select("p#value").text(d3.timeFormat("%Y-%m-%d")(sliderTime.value()));
+        d3.select("div#date-display").text(d3.timeFormat("%Y-%m-%d")(sliderTime.value()));
     }
 
     return {
