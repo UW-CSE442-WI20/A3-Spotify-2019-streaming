@@ -27,11 +27,11 @@ var margin = {
     left: 10
 };
 var w = 800 - margin.left - margin.right;
-var h = 400 - margin.top - margin.bottom;
+var h = 460 - margin.top - margin.bottom;
 
 //set x and y ranges
 var y = d3.scaleBand()
-.range([h, 0])
+.range([h - 10, 0])
 .padding(0.1);
 
 var x = d3.scaleLinear()
@@ -96,33 +96,6 @@ function initGraph() {
         .attr("height", h + margin.top + margin.bottom)
         .append("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-    var bars = svg.selectAll("rect")
-        .data([[], [], [], [], [], [], [], [], [], []]);
-
-    // create the bars
-    bars.enter().append("rect")
-        .attr("class", "bar")
-        .attr("width", function (d) { return x(d[0]); })
-        .attr("y", function (d) {
-            return y(d[1]);
-        })
-        .attr("fill", function () {
-            return "rgb(30, 215, 96)";
-        })
-        .attr("height", y.bandwidth());
-
-    // add the x Axis
-    svg.append("g")
-        .attr("transform", "translate(0," + h + ")")
-        .attr("color", "white")
-        .call(d3.axisBottom(x));
-    // .ticks(10));
-
-    // add the y Axis
-    svg.append("g")
-        .call(d3.axisLeft(y).tickSize(0).tickFormat(""));
-
 }
 
 function updateSVG(fullSongNames, barDataset, artistNames, songNames) {
@@ -131,9 +104,20 @@ function updateSVG(fullSongNames, barDataset, artistNames, songNames) {
     // update and add the x Axis
     svg.selectAll("g").remove();
     svg.append("g")
-        .attr("transform", "translate(0," + h + ")")
+        .attr("transform", "translate(0," + (h - 10) + ")")
         .attr("color", "white")
         .call(d3.axisBottom(x));
+
+    // add axis label
+    svg.append("text")
+        .attr("transform",
+            "translate(" + (w / 2) + " ," +
+            (h + margin.top + 10) + ")")
+        .attr("fill", "white")
+        .attr("font-family", "sans-serif")
+        .attr("font-size", "12px")
+        .style("text-anchor", "middle")
+        .text("Streams");
 
     // add the y Axis
     svg.append("g")
@@ -144,7 +128,6 @@ function updateSVG(fullSongNames, barDataset, artistNames, songNames) {
         .append("title")
         .text(function (d) {
             var i = 10 - parseInt(d[1]);
-            // NOTE: date is slider date (not dropdown date)
             return "\"" + fullSongNames[i] + "\" by " + artistNames[i] + ": "
                 + d[0] + " streams on " + slider.getDate();
         })
@@ -158,7 +141,7 @@ function updateSVG(fullSongNames, barDataset, artistNames, songNames) {
         })
         .attr("text-anchor", "end")
         .attr("y", function (d, i) {
-            return (9 - i) * (h / barDataset.length) + 27;
+            return (9 - i) * ((h - 14) / barDataset.length) + 26;
         })
         .attr("x", function (d) {
             var index = d[1];
@@ -166,7 +149,7 @@ function updateSVG(fullSongNames, barDataset, artistNames, songNames) {
             return x(streams) - 8;
         })
         .attr("font-family", "sans-serif")
-        .attr("font-size", "14px")
+        .attr("font-size", "12px")
         .attr("font-weight", 550)
         .attr("fill", "black")
 }
@@ -177,25 +160,24 @@ function updateBars(barDataset) {
 
     bars.enter().append("rect")
         .attr("class", "bar")
-        .attr("width", function (d) { return x(d[0]); })
-        .attr("y", function (d) {
-            return y(d[1]);
+        .attr("fill", function () {
+            return "rgb(30, 215, 96)";
         })
-        .attr("fill", function (d) {
-            return "rgb(0, 0, " + (d[0] * 10) + ")";
-        })
-        .attr("height", y.bandwidth())
-        .merge(bars)	//Update…
-        .attr("x", function (d, i) {
+        .merge(bars)
+        .attr("x", function (d) {
+ 
             return x(d[1]);
         })
         .attr("y", function (d) {
+            console.log(y)
+            console.log(d)
             return y(d[1]);
         })
-        .attr("width", function (d) { return x(d[0]); })
+        .attr("width", function (d) {
+            return x(d[0]);
+        })
         .attr("height", y.bandwidth());
 }
-
 
 function updateGraph(filtered) {
     barDataset = [[]];
@@ -242,14 +224,18 @@ slider = function () {
             return new Date(2019, 0, 1 + 7 * d);
         });
 
+        var months = d3.range(0, 12).map(function (d) {
+            return new Date(2019, d, 1);
+        });
+
         sliderTime = d3
             .sliderBottom()
             .min(d3.min(weeks2019))
             .max(d3.max(weeks2019))
-            .step(28)
-            .width(1240 - margin.left - margin.right)
-            .tickFormat(d3.timeFormat("%m-%d"))
-            .tickValues(weeks2019)
+            .step(12)
+            .width(770 - margin.left - margin.right)
+            .tickValues(months)
+            .tickFormat(d3.timeFormat("%b"))
             .displayValue(false)
             .on("onchange", val => {
                 d3.select("div#date-display").text(d3.timeFormat("%Y-%m-%d")(val));
@@ -267,10 +253,10 @@ slider = function () {
         var gTime = d3
             .select("div#slider")
             .append("svg") 
-            .attr("width", 1350 - margin.left - margin.right)
-            .attr("height", 132 - margin.top - margin.bottom)
+            .attr("width", 900 - margin.left - margin.right)
+            .attr("height", 100 - margin.top - margin.bottom)
             .append("g")
-            .attr("transform", "translate(30,30)");
+            .attr("transform", "translate(30,10)");
 
         gTime.call(sliderTime);
         gTime.selectAll("text").attr("dx", "-10px").attr("dy", "-16px");

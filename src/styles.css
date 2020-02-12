@@ -21,6 +21,7 @@
     height: 30px;
 } */
 
+
 #play-button:hover {
     background-color: orange;
 }
@@ -75,28 +76,25 @@ rect:hover {
 
 #date-display {
     font-weight: 900;
-    font-size: 60px;
+    font-size: 48px;
     font-family: Helvetica;
     color: #99B793;
     position: absolute;
-    left: 1100px;
-    top: 450px;
+    left: 800px;
+    top: 475px;
 }
 
-/* svg#graph {
-    width: auto;
-    height: 100%;
-} */
-
 #writeup {
-    color: rgb(192, 206, 189) ;
+    color: rgb(192, 206, 189);
 }
 
 h1 {
     font-family: Helvetica;
     color: #99B793;
     font-weight: 900;
-    font-size: 38px;
+    font-size: 28px;
+    padding: 5px;
+    margin: 5px;
 }
 
 body {
