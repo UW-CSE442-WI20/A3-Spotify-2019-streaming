@@ -1,0 +1,98 @@
+/* Slider Styles */
+
+#slider text {
+    transform: rotate(-90deg);
+    text-anchor: end;
+}
+
+
+
+/* Slider Styles */
+
+/* Play Button Styles */
+
+#play-button {
+    background: #4CAF50;
+    border-radius: 3px;
+    border: none;
+    color: white;
+    margin: 0;
+    padding: 0 12px;
+    width: 60px;
+    cursor: pointer;
+    height: 30px;
+}
+
+#play-button:hover {
+    background-color: orange;
+    ;
+}
+
+/* Play Button Styles */
+
+/* Navigation Bar Styles */
+
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #333;
+}
+
+li {
+    float: left;
+}
+
+li a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    font-family: Helvetica;
+    font-weight: 700;
+}
+
+li a:hover:not(.active) {
+    background-color: #111;
+}
+
+.active {
+    color: black;
+    background-color: #1ed760;
+}
+
+/* Navigation Styles */
+
+rect {
+    -moz-transition: all 0.25s;
+    -o-transition: all 0.25s;
+    -webkit-transition: all 0.25s;
+    transition: all 0.25s;
+}
+
+rect:hover {
+    fill: orange;
+}
+
+p#value {
+    font-weight: 900;
+    font-size: 60px;
+    font-family: Helvetica;
+    color: #99B793;
+    position: absolute;
+    left: 1100px;
+    top: 540px;
+}
+
+h1 {
+    font-family: Helvetica;
+    color: #99B793;
+    font-weight: 900;
+    font-size: 38px;
+}
+
+body {
+    background-color: #232323;
+}
