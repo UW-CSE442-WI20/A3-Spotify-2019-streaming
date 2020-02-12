@@ -66,6 +66,14 @@ function init() {
                 var index = countriesName.indexOf(country);
                 var fileName = "streams" + countriesList[index] + "10.csv";
 
+                if(countriesList[index] == "global") {
+                    document.getElementById("flag").style.visibility="hidden"; 
+                }
+                else {
+                    document.getElementById("flag").src="https://cdn.ip2location.com/assets/img/flags/" + countriesList[index] + ".png";
+                    document.getElementById("flag").style.visibility="visible"; 
+                }
+
                 // load new csv, and update graph
                 d3.csv(fileName).then(function (data) {
                     dataset = data;

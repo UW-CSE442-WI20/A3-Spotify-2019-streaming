@@ -7,6 +7,12 @@
 
 /* Slider Styles */
 
+#flag{
+    height: 20px;
+    visibility: hidden;
+    margin-bottom: 3px;
+}
+
 /* Play Button Styles */
 
 /* #play-button {
