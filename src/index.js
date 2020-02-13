@@ -164,7 +164,7 @@ function updateSVG(fullSongNames, barDataset, artistNames, songNames) {
         .attr("font-family", "sans-serif")
         .attr("font-size", "12px")
         .attr("font-weight", 550)
-        .attr("fill", "black")
+        .attr("fill","rgb(35, 35, 35)")
 }
 
 function updateBars(barDataset) {
