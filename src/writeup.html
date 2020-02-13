@@ -20,9 +20,48 @@
         <br><br>
         We used a variety of methods for our development process including working remotely,
         meeting up either all together, in small groups, or as partners, and communicating
-        through Facebook messanger about different ideas and progress reports.
+        through Facebook messanger about different ideas and progress reports. We used a 
+        variety of methods for our development process including working remotely, meeting 
+        up either all together, in small groups, or as partners, and communicating through 
+        Facebook messenger about different ideas and progress reports. During our in person 
+        group meetings, we would discuss what the current status of our visualization, 
+        problems that we were having, and what needed to be done next. After agreeing on 
+        this to do list, everyone in the group would pick a task off of this list to work 
+        on. Using this development process, work was split evenly while still giving each 
+        team member their own features to work on. Alexis’s tasks were mainly data wrangling 
+        and bounding the data to the bar graph. Shayan’s tasks mostly had to do with the 
+        timeline filter and the country flag customization. Anirudh’s was in 
+        charge of the tooltip interaction technique and Ethan was in charge of tasks 
+        surrounding the important UX design features. Zachary’s tasks were mainly managing 
+        code integration and refactoring the code to help our different interaction 
+        techniques work together smoothly. Collectively we spent about 35 hours developing 
+        our application. The aspects that took the most time were the data wrangling, 
+        bounding the data to the bar graph using d3, and integrating the timeline with the 
+        bar graph. Spotify charts only lets you download data for one day and for one 
+        country at a time; therefore, we had to write python scripts that would fetch this 
+        data for each day in 2019 and compile it into one csv for each country, which took 
+        several hours to run. Bounding the data and integrating the timeline with the bar 
+        graph was time consuming not only because it was difficult, but also because this 
+        was our first time using d3. 
 
-
+        We explored several other designs before finally deciding on the visual encodings 
+        and interaction techniques that you see on our webpage. Before we decided on the 
+        timeline interaction technique, we experimented with a date dropdown menu with 
+        everyday in 2019. We decided to go with the timeline instead of the dropdown 
+        because we wanted to be able to show song streaming trends over time, and it was 
+        easier to transition between days with the slider. We also experimented with using 
+        a map to filter the data by country, but we decided to go with dropdown menu 
+        instead for a number of reasons. First off, Spotify is only available and collects 
+        data for roughly half of the world’s countries, so users would not be able to 
+        interact with a large portion of the map. Another reason is that the user would 
+        have a hard time selecting and filtering the data for smaller countries on the map. 
+        We also wanted the user to be able to interact with global data as well. We used a 
+        bar graph as our visual encoding because we wanted to show the number of streams 
+        for the top 10 songs on any given day and bar graphs are a clear way to display 
+        the relationship between different categories and a discrete value. We started 
+        with a vertical bar graph, but later switched to a horizontal bar graph because 
+        the song labels of the top songs were easier to display and read. 
+        
     </p>
   </body>
 </html>
