@@ -140,9 +140,7 @@ var songNames; //--------------------------------// end globals
 
 function init() {
   // load global data
-  console.log("init begin");
   d3.csv("streamsglobal10.csv").then(function (data) {
-    console.log("load global data begin");
     slider.initSlider();
     dataset = data;
     var filtered = data.filter(function (d) {
@@ -159,7 +157,7 @@ function init() {
       if (countriesList[index] == "global") {
         document.getElementById("flag").style.visibility = "hidden";
       } else {
-        document.getElementById("flag").src = "https://cdn.ip2location.com/assets/img/flags/" + countriesList[index] + ".png";
+        document.getElementById("flag").src = "svg/" + countriesList[index] + ".svg";
         document.getElementById("flag").style.visibility = "visible";
       } // load new csv, and update graph
 
@@ -180,9 +178,7 @@ function init() {
     }).text(function (d) {
       return d[0].toUpperCase() + d.slice(1, d.length); // capitalize 1st letter
     });
-    console.log("load global data end");
   });
-  console.log("init end");
 }
 
 function initGraph() {
@@ -221,8 +217,6 @@ function updateBars(barDataset) {
   }).merge(bars).attr("x", function (d) {
     return x(d[1]);
   }).attr("y", function (d) {
-    console.log(y);
-    console.log(d);
     return y(d[1]);
   }).attr("width", function (d) {
     return x(d[0]);
@@ -328,7 +322,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "53211" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "57427" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
