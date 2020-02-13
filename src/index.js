@@ -18,6 +18,8 @@ var countriesName = ["Canada", "Denmark", "Greece", "Iceland", "Mexico", "Philip
     "Bolivia", "Czech Republic", "France", "Ireland", "Panama", "Singapore", "Vietnam",
     "Brazil", "Germany", "United Kingdom", "Israel", "Peru", "Slovakia", "global"];
 var Countries = (countriesName).slice(0).sort();
+console.log(Countries);
+
 
 var barPadding = 1;
 var margin = {
@@ -41,7 +43,8 @@ var x = d3.scaleLinear()
 var dataset = [];
 var barDataset;
 var songNames;
-
+var barWidth = [];
+    var textWidth = [];
 
 //--------------------------------// end globals
 
@@ -112,6 +115,7 @@ function initGraph() {
 }
 
 function updateSVG(fullSongNames, barDataset, artistNames, songNames) {
+    textWidth = [];
     svg.selectAll("text").remove();
 
     // update and add the x Axis
@@ -145,6 +149,7 @@ function updateSVG(fullSongNames, barDataset, artistNames, songNames) {
                 + d[0] + " streams on " + slider.getDate();
         })
 
+
     svg.selectAll("text.value")
         .data(barDataset)
         .enter()
@@ -161,13 +166,20 @@ function updateSVG(fullSongNames, barDataset, artistNames, songNames) {
             var streams = barDataset[index - 1][0];
             return x(streams) - 8;
         })
+        .each(function(d,i) {
+            var thisWidth = this.getComputedTextLength()
+           textWidth.push((thisWidth))
+        })
         .attr("font-family", "sans-serif")
         .attr("font-size", "12px")
         .attr("font-weight", 550)
         .attr("fill","rgb(35, 35, 35)")
+
+        
 }
 
 function updateBars(barDataset) {
+    barWidth = [];
     var bars = svg.selectAll("rect")
         .data(barDataset);
 
@@ -187,13 +199,19 @@ function updateBars(barDataset) {
             return y(d[1]);
         })
         .attr("width", function (d) {
+            this.comp
+            barWidth.push( x(d[0]));
             return x(d[0]);
         })
         .attr("height", y.bandwidth());
+
+        
 }
+
 
 function updateGraph(filtered) {
     barDataset = [[]];
+    
     songNames = [""];
     var fullSongNames = [""];
     artistNames = [""];
@@ -202,9 +220,6 @@ function updateGraph(filtered) {
         var arrayObj = [parseInt(filtered[i].Streams), (10 - i) + ""];
         var name = filtered[i]["Track Name"];
         fullSongNames[i] = name;
-        if (filtered[i]["Track Name"].length > 30) {
-            name = name.substring(0, 31) + "...";
-        }
         songNames[i] = name;
         artistNames[i] = filtered[i]["Artist"];
         barDataset[i] = arrayObj;
@@ -214,8 +229,24 @@ function updateGraph(filtered) {
     x.domain([0, d3.max(barDataset, function (d) { return d[0]; })])
     y.domain(d3.range(1, barDataset.length + 1));
 
-    updateBars(barDataset)
+    updateBars(barDataset);
+    console.log(barWidth); 
+
+    //47. 
+
+    for (var i = 0; i < songNames.length; i++) {
+        var name = songNames[i];
+        if ( (songNames[i].length * 6) > barWidth[i]   ) {
+            var digits = ( (songNames[i].length * 6) - barWidth[i]) /6.0; 
+            console.log(name.length);
+            console.log(digits);
+            songNames[i] = name.substring(0, name.length - 2 - digits ) + "...";
+            
+
+        }
+    }
     updateSVG(fullSongNames, barDataset, artistNames, songNames);
+    console.log(textWidth);
 }
 
 
