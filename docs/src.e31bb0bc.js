@@ -157,7 +157,7 @@ function init() {
       if (countriesList[index] == "global") {
         document.getElementById("flag").style.visibility = "hidden";
       } else {
-        document.getElementById("flag").src = "svg/" + countriesList[index] + ".svg";
+        document.getElementById("flag").src = countriesList[index] + ".svg";
         document.getElementById("flag").style.visibility = "visible";
       } // load new csv, and update graph
 
