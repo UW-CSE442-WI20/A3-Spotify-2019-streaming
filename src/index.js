@@ -18,7 +18,6 @@ var countriesName = ["Canada", "Denmark", "Greece", "Iceland", "Mexico", "Philip
     "Bolivia", "Czech Republic", "France", "Ireland", "Panama", "Singapore", "Vietnam",
     "Brazil", "Germany", "United Kingdom", "Israel", "Peru", "Slovakia", "global"];
 var Countries = (countriesName).slice(0).sort();
-console.log(Countries);
 
 
 var barPadding = 1;
@@ -224,23 +223,21 @@ function updateGraph(filtered) {
     y.domain(d3.range(1, barDataset.length + 1));
 
     updateBars(barDataset);
-    console.log(barWidth); 
 
-    //47. 
+
 
     for (var i = 0; i < songNames.length; i++) {
         var name = songNames[i];
         if ( (songNames[i].length * 6) > barWidth[i]   ) {
             var digits = ( (songNames[i].length * 6) - barWidth[i]) /6.0; 
-            console.log(name.length);
-            console.log(digits);
+    
             songNames[i] = name.substring(0, name.length - 2 - digits ) + "...";
             
 
         }
     }
     updateSVG(fullSongNames, barDataset, artistNames, songNames);
-    console.log(textWidth);
+
 }
 
 
