@@ -129,10 +129,10 @@ var margin = {
   bottom: 30,
   left: 10
 };
-var w = 1200 - margin.left - margin.right;
-var h = 612 - margin.top - margin.bottom; //set x and y ranges
+var w = 800 - margin.left - margin.right;
+var h = 460 - margin.top - margin.bottom; //set x and y ranges
 
-var y = d3.scaleBand().range([h, 0]).padding(0.1);
+var y = d3.scaleBand().range([h - 10, 0]).padding(0.1);
 var x = d3.scaleLinear().range([0, w]);
 var dataset = [];
 var barDataset;
@@ -142,17 +142,25 @@ function init() {
   // load global data
   d3.csv("streamsglobal10.csv").then(function (data) {
     slider.initSlider();
-    initGraph();
     dataset = data;
     var filtered = data.filter(function (d) {
       return d["date"] === slider.getDate();
     });
+    initGraph();
     updateGraph(filtered); // update graph based on country dropdown
 
     var countryDropdown = d3.select("#vis-container-country").insert("select", "svg").on("change", function () {
       var country = d3.select(this).property("value");
       var index = countriesName.indexOf(country);
-      var fileName = "streams" + countriesList[index] + "10.csv"; // load new csv, and update graph
+      var fileName = "streams" + countriesList[index] + "10.csv";
+
+      if (countriesList[index] == "global") {
+        document.getElementById("flag").style.visibility = "hidden";
+      } else {
+        document.getElementById("flag").src = "https://cdn.ip2location.com/assets/img/flags/" + countriesList[index] + ".png";
+        document.getElementById("flag").style.visibility = "visible";
+      } // load new csv, and update graph
+
 
       d3.csv(fileName).then(function (data) {
         dataset = data;
@@ -174,59 +182,43 @@ function init() {
 }
 
 function initGraph() {
-  svg = d3.select("div#graph").append("svg").attr("width", w + margin.left + margin.right).attr("height", h + margin.top + margin.bottom).append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-  var bars = svg.selectAll("rect").data([[], [], [], [], [], [], [], [], [], []]); // create the bars
-
-  bars.enter().append("rect").attr("class", "bar").attr("width", function (d) {
-    return x(d[0]);
-  }).attr("y", function (d) {
-    return y(d[1]);
-  }).attr("fill", function () {
-    return "rgb(30, 215, 96)";
-  }).attr("height", y.bandwidth()); // add the x Axis
-
-  svg.append("g").attr("transform", "translate(0," + h + ")").attr("color", "white").call(d3.axisBottom(x)); // .ticks(10));
-  // add the y Axis
-
-  svg.append("g").call(d3.axisLeft(y).tickSize(0).tickFormat(""));
+  svg = d3.select("svg#graph").attr("width", w + margin.left + margin.right).attr("height", h + margin.top + margin.bottom).append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 }
 
 function updateSVG(fullSongNames, barDataset, artistNames, songNames) {
   svg.selectAll("text").remove(); // update and add the x Axis
 
   svg.selectAll("g").remove();
-  svg.append("g").attr("transform", "translate(0," + h + ")").attr("color", "white").call(d3.axisBottom(x)); // add the y Axis
+  svg.append("g").attr("transform", "translate(0," + (h - 10) + ")").attr("color", "white").call(d3.axisBottom(x)); // add axis label
+
+  svg.append("text").attr("transform", "translate(" + w / 2 + " ," + (h + margin.top + 10) + ")").attr("fill", "white").attr("font-family", "sans-serif").attr("font-size", "12px").style("text-anchor", "middle").text("Streams"); // add the y Axis
 
   svg.append("g").call(d3.axisLeft(y).tickSize(0).tickFormat(""));
   svg.selectAll("title").remove();
   svg.selectAll("rect").append("title").text(function (d) {
-    var i = 10 - parseInt(d[1]); // NOTE: date is slider date (not dropdown date)
-
+    var i = 10 - parseInt(d[1]);
     return "\"" + fullSongNames[i] + "\" by " + artistNames[i] + ": " + d[0] + " streams on " + slider.getDate();
   });
   svg.selectAll("text.value").data(barDataset).enter().append("text").text(function (d) {
     return songNames[parseInt(d[1]) - 1];
   }).attr("text-anchor", "end").attr("y", function (d, i) {
-    return (9 - i) * (h / barDataset.length) + 27;
+    return (9 - i) * ((h - 14) / barDataset.length) + 26;
   }).attr("x", function (d) {
     var index = d[1];
     var streams = barDataset[index - 1][0];
     return x(streams) - 8;
-  }).attr("font-family", "sans-serif").attr("font-size", "14px").attr("font-weight", 550).attr("fill", "black");
+  }).attr("font-family", "sans-serif").attr("font-size", "12px").attr("font-weight", 550).attr("fill", "black");
 }
 
 function updateBars(barDataset) {
   var bars = svg.selectAll("rect").data(barDataset);
-  bars.enter().append("rect").attr("class", "bar").attr("width", function (d) {
-    return x(d[0]);
-  }).attr("y", function (d) {
-    return y(d[1]);
-  }).attr("fill", function (d) {
-    return "rgb(0, 0, " + d[0] * 10 + ")";
-  }).attr("height", y.bandwidth()).merge(bars) //Update…
-  .attr("x", function (d, i) {
+  bars.enter().append("rect").attr("class", "bar").attr("fill", function () {
+    return "rgb(30, 215, 96)";
+  }).merge(bars).attr("x", function (d) {
     return x(d[1]);
   }).attr("y", function (d) {
+    console.log(y);
+    console.log(d);
     return y(d[1]);
   }).attr("width", function (d) {
     return x(d[0]);
@@ -277,8 +269,11 @@ slider = function () {
     var weeks2019 = d3.range(0, 53).map(function (d) {
       return new Date(2019, 0, 1 + 7 * d);
     });
-    sliderTime = d3.sliderBottom().min(d3.min(weeks2019)).max(d3.max(weeks2019)).step(28).width(1240 - margin.left - margin.right).tickFormat(d3.timeFormat("%m-%d")).tickValues(weeks2019).displayValue(false).on("onchange", function (val) {
-      d3.select("p#value").text(d3.timeFormat("%Y-%m-%d")(val));
+    var months = d3.range(0, 12).map(function (d) {
+      return new Date(2019, d, 1);
+    });
+    sliderTime = d3.sliderBottom().min(d3.min(weeks2019)).max(d3.max(weeks2019)).step(12).width(770 - margin.left - margin.right).tickValues(months).tickFormat(d3.timeFormat("%b")).displayValue(false).on("onchange", function (val) {
+      d3.select("div#date-display").text(d3.timeFormat("%Y-%m-%d")(val));
       date = d3.timeFormat("%Y-%m-%d")(val);
       var filtered = dataset.filter(function (d) {
         for (var i = 0; i < dataset.length; i++) {
@@ -287,11 +282,11 @@ slider = function () {
       });
       updateGraph(filtered);
     });
-    var gTime = d3.select("div#slider").append("svg").attr("width", 1350 - margin.left - margin.right).attr("height", 132 - margin.top - margin.bottom).append("g").attr("transform", "translate(30,30)");
+    var gTime = d3.select("div#slider").append("svg").attr("width", 900 - margin.left - margin.right).attr("height", 100 - margin.top - margin.bottom).append("g").attr("transform", "translate(30,10)");
     gTime.call(sliderTime);
     gTime.selectAll("text").attr("dx", "-10px").attr("dy", "-16px"); // show date at very beginning
 
-    d3.select("p#value").text(d3.timeFormat("%Y-%m-%d")(sliderTime.value()));
+    d3.select("div#date-display").text(d3.timeFormat("%Y-%m-%d")(sliderTime.value()));
   }
 
   return {
@@ -301,7 +296,7 @@ slider = function () {
 }();
 
 init();
-},{}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{}],"../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -329,7 +324,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "49753" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "49893" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
@@ -505,5 +500,5 @@ function hmrAcceptRun(bundle, id) {
     return true;
   }
 }
-},{}]},{},["../node_modules/parcel-bundler/src/builtins/hmr-runtime.js","index.js"], null)
+},{}]},{},["../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js","index.js"], null)
 //# sourceMappingURL=/src.e31bb0bc.js.map
