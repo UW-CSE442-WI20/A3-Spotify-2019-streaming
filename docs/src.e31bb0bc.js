@@ -211,7 +211,7 @@ function updateSVG(fullSongNames, barDataset, artistNames, songNames) {
     var index = d[1];
     var streams = barDataset[index - 1][0];
     return x(streams) - 8;
-  }).attr("font-family", "sans-serif").attr("font-size", "12px").attr("font-weight", 550).attr("fill", "black");
+  }).attr("font-family", "sans-serif").attr("font-size", "12px").attr("font-weight", 550).attr("fill", "rgb(35, 35, 35)");
 }
 
 function updateBars(barDataset) {
@@ -300,7 +300,7 @@ slider = function () {
 }();
 
 init();
-},{}],"../../../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -328,7 +328,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "53211" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "55109" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
@@ -504,5 +504,5 @@ function hmrAcceptRun(bundle, id) {
     return true;
   }
 }
-},{}]},{},["../../../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js","index.js"], null)
+},{}]},{},["../node_modules/parcel-bundler/src/builtins/hmr-runtime.js","index.js"], null)
 //# sourceMappingURL=/src.e31bb0bc.js.map
