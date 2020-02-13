@@ -47,7 +47,9 @@ var songNames;
 
 function init() {
     // load global data
+    console.log("init begin");
     d3.csv("streamsglobal10.csv").then(function (data) {
+        console.log("load global data begin");
         slider.initSlider();
         
         dataset = data;
@@ -95,7 +97,9 @@ function init() {
             .text(function (d) {
                 return d[0].toUpperCase() + d.slice(1, d.length); // capitalize 1st letter
             });
+        console.log("load global data end");
     });
+    console.log("init end")
 }
 
 function initGraph() {
