@@ -50,9 +50,7 @@ var barWidth = [];
 
 function init() {
     // load global data
-    console.log("init begin");
     d3.csv("streamsglobal10.csv").then(function (data) {
-        console.log("load global data begin");
         slider.initSlider();
         
         dataset = data;
@@ -75,7 +73,7 @@ function init() {
                     document.getElementById("flag").style.visibility="hidden"; 
                 }
                 else {
-                    document.getElementById("flag").src="https://cdn.ip2location.com/assets/img/flags/" + countriesList[index] + ".png";
+                    document.getElementById("flag").src=(countriesList[index] + ".svg");
                     document.getElementById("flag").style.visibility="visible"; 
                 }
 
@@ -100,9 +98,7 @@ function init() {
             .text(function (d) {
                 return d[0].toUpperCase() + d.slice(1, d.length); // capitalize 1st letter
             });
-        console.log("load global data end");
     });
-    console.log("init end")
 }
 
 function initGraph() {
@@ -194,8 +190,6 @@ function updateBars(barDataset) {
             return x(d[1]);
         })
         .attr("y", function (d) {
-            console.log(y)
-            console.log(d)
             return y(d[1]);
         })
         .attr("width", function (d) {
