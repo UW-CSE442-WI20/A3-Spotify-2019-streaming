@@ -103,7 +103,8 @@ function init() {
 }
 
 function initGraph() {
-    svg = d3.select("svg#graph")
+    svg = d3.select("div#graph")
+        .append("svg")
         .attr("width", w + margin.left + margin.right)
         .attr("height", h + margin.top + margin.bottom)
         .append("g")

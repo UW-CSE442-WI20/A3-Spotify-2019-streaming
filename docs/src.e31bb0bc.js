@@ -140,7 +140,9 @@ var songNames; //--------------------------------// end globals
 
 function init() {
   // load global data
+  console.log("init begin");
   d3.csv("streamsglobal10.csv").then(function (data) {
+    console.log("load global data begin");
     slider.initSlider();
     dataset = data;
     var filtered = data.filter(function (d) {
@@ -178,11 +180,13 @@ function init() {
     }).text(function (d) {
       return d[0].toUpperCase() + d.slice(1, d.length); // capitalize 1st letter
     });
+    console.log("load global data end");
   });
+  console.log("init end");
 }
 
 function initGraph() {
-  svg = d3.select("svg#graph").attr("width", w + margin.left + margin.right).attr("height", h + margin.top + margin.bottom).append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+  svg = d3.select("div#graph").append("svg").attr("width", w + margin.left + margin.right).attr("height", h + margin.top + margin.bottom).append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 }
 
 function updateSVG(fullSongNames, barDataset, artistNames, songNames) {
@@ -296,7 +300,7 @@ slider = function () {
 }();
 
 init();
-},{}],"../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{}],"../../../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -324,7 +328,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "53023" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "53211" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
@@ -500,5 +504,5 @@ function hmrAcceptRun(bundle, id) {
     return true;
   }
 }
-},{}]},{},["../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js","index.js"], null)
+},{}]},{},["../../../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js","index.js"], null)
 //# sourceMappingURL=/src.e31bb0bc.js.map
