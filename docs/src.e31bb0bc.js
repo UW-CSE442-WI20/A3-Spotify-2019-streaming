@@ -122,6 +122,7 @@ parcelRequire = (function (modules, cache, entry, globalName) {
 var countriesList = ["ca", "dk", "gr", "is", "mx", "ph", "sv", "ar", "ch", "do", "gt", "it", "my", "pl", "th", "at", "cl", "ec", "hk", "jp", "pt", "tr", "au", "co", "hn", "nl", "py", "tw", "be", "cr", "es", "hu", "no", "ro", "us", "fi", "id", "nz", "se", "uy", "bo", "cz", "fr", "ie", "pa", "sg", "vn", "br", "de", "gb", "il", "pe", "sk", "global"];
 var countriesName = ["Canada", "Denmark", "Greece", "Iceland", "Mexico", "Philippines", "El Salvador", "Argentina", "Switzerland", "Dominican Republic", "Guatemala", "Italy", "Malaysia", "Poland", "Thailand", "Austria", "Chile", "Ecuador", "Hong Kong", "Japan", "Portugal", "Turkey", "Australia", "Columbia", "Honduras", "Netherlands", "Paraguay", "Taiwan", "Belgium", "Costa Rica", "Spain", "Hungary", "Norway", "Romania", "United States", "Finland", "Indonesia", "New Zealand", "Sweden", "Uruguay", "Bolivia", "Czech Republic", "France", "Ireland", "Panama", "Singapore", "Vietnam", "Brazil", "Germany", "United Kingdom", "Israel", "Peru", "Slovakia", "global"];
 var Countries = countriesName.slice(0).sort();
+console.log(Countries);
 var barPadding = 1;
 var margin = {
   top: 15,
@@ -136,11 +137,15 @@ var y = d3.scaleBand().range([h - 10, 0]).padding(0.1);
 var x = d3.scaleLinear().range([0, w]);
 var dataset = [];
 var barDataset;
-var songNames; //--------------------------------// end globals
+var songNames;
+var barWidth = [];
+var textWidth = []; //--------------------------------// end globals
 
 function init() {
   // load global data
+  console.log("init begin");
   d3.csv("streamsglobal10.csv").then(function (data) {
+    console.log("load global data begin");
     slider.initSlider();
     dataset = data;
     var filtered = data.filter(function (d) {
@@ -157,7 +162,7 @@ function init() {
       if (countriesList[index] == "global") {
         document.getElementById("flag").style.visibility = "hidden";
       } else {
-        document.getElementById("flag").src = countriesList[index] + ".svg";
+        document.getElementById("flag").src = "https://cdn.ip2location.com/assets/img/flags/" + countriesList[index] + ".png";
         document.getElementById("flag").style.visibility = "visible";
       } // load new csv, and update graph
 
@@ -178,7 +183,9 @@ function init() {
     }).text(function (d) {
       return d[0].toUpperCase() + d.slice(1, d.length); // capitalize 1st letter
     });
+    console.log("load global data end");
   });
+  console.log("init end");
 }
 
 function initGraph() {
@@ -186,6 +193,7 @@ function initGraph() {
 }
 
 function updateSVG(fullSongNames, barDataset, artistNames, songNames) {
+  textWidth = [];
   svg.selectAll("text").remove(); // update and add the x Axis
 
   svg.selectAll("g").remove();
@@ -207,18 +215,26 @@ function updateSVG(fullSongNames, barDataset, artistNames, songNames) {
     var index = d[1];
     var streams = barDataset[index - 1][0];
     return x(streams) - 8;
+  }).each(function (d, i) {
+    var thisWidth = this.getComputedTextLength();
+    textWidth.push(thisWidth);
   }).attr("font-family", "sans-serif").attr("font-size", "12px").attr("font-weight", 550).attr("fill", "rgb(35, 35, 35)");
 }
 
 function updateBars(barDataset) {
+  barWidth = [];
   var bars = svg.selectAll("rect").data(barDataset);
   bars.enter().append("rect").attr("class", "bar").attr("fill", function () {
     return "rgb(30, 215, 96)";
   }).merge(bars).attr("x", function (d) {
     return x(d[1]);
   }).attr("y", function (d) {
+    console.log(y);
+    console.log(d);
     return y(d[1]);
   }).attr("width", function (d) {
+    this.comp;
+    barWidth.push(x(d[0]));
     return x(d[0]);
   }).attr("height", y.bandwidth());
 }
@@ -233,11 +249,6 @@ function updateGraph(filtered) {
     var arrayObj = [parseInt(filtered[i].Streams), 10 - i + ""];
     var name = filtered[i]["Track Name"];
     fullSongNames[i] = name;
-
-    if (filtered[i]["Track Name"].length > 30) {
-      name = name.substring(0, 31) + "...";
-    }
-
     songNames[i] = name;
     artistNames[i] = filtered[i]["Artist"];
     barDataset[i] = arrayObj;
@@ -249,7 +260,21 @@ function updateGraph(filtered) {
   })]);
   y.domain(d3.range(1, barDataset.length + 1));
   updateBars(barDataset);
+  console.log(barWidth); //47. 
+
+  for (var i = 0; i < songNames.length; i++) {
+    var name = songNames[i];
+
+    if (songNames[i].length * 6 > barWidth[i]) {
+      var digits = (songNames[i].length * 6 - barWidth[i]) / 6.0;
+      console.log(name.length);
+      console.log(digits);
+      songNames[i] = name.substring(0, name.length - 2 - digits) + "...";
+    }
+  }
+
   updateSVG(fullSongNames, barDataset, artistNames, songNames);
+  console.log(textWidth);
 }
 
 slider = function () {
@@ -294,7 +319,7 @@ slider = function () {
 }();
 
 init();
-},{}],"../../../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -322,7 +347,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "59029" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "58268" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
@@ -498,5 +523,5 @@ function hmrAcceptRun(bundle, id) {
     return true;
   }
 }
-},{}]},{},["../../../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js","index.js"], null)
+},{}]},{},["../node_modules/parcel-bundler/src/builtins/hmr-runtime.js","index.js"], null)
 //# sourceMappingURL=/src.e31bb0bc.js.map
